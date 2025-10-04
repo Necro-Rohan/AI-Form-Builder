@@ -12,5 +12,9 @@ export default defineConfig({
         changeOrigin: true,
       },
     },
+    allowedHosts: [
+      "ai-form-builder-s4hj.onrender.com",
+      "ai-form-builder-3.onrender.com",
+    ],
   },
 });
