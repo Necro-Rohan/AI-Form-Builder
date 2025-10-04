@@ -7,7 +7,7 @@
     "dev": "npx vite",
     "build": "npx vite build",
     "preview": "npx vite preview --port 10000 --host 0.0.0.0",
-    "start": "npx serve dist -p 10000 -s"
+    "start": "node start.js"
   },
   "dependencies": {
     "react": "^18.2.0",
