@@ -10,12 +10,7 @@ export default defineConfig({
   preview: {
     port: 10000,
     host: true,
-    allowedHosts: [
-      'localhost',
-      '127.0.0.1',
-      'ai-form-builder-jadu.onrender.com',
-      '.onrender.com'
-    ]
+    allowedHosts: 'all'
   },
   build: {
     outDir: 'dist',
