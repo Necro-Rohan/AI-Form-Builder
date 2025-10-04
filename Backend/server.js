@@ -42,6 +42,7 @@ app.use(cors({
     'https://ai-form-builder-s4hj.onrender.com',
     'https://ai-form-builder2.vercel.app', // Vercel frontend
     'https://ai-form-builder2.vercel.app', // Vercel frontend (duplicate for safety)
+    'https://ai-form-builder2-1.onrender.com', // Render frontend
     'https://your-frontend-domain.com' // Add your production frontend URL here
   ],
   credentials: true,
