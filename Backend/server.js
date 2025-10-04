@@ -11,6 +11,7 @@ import { createClient } from "@supabase/supabase-js";
 
 // Check if required environment variables are present
 console.log("🔍 Environment variables check:");
+console.log("🚀 CORS updated for jadu-form-builder.onrender.com");
 console.log("DATABASE_URL:", process.env.DATABASE_URL ? "✅ Present" : "❌ Missing");
 console.log("DIRECT_URL:", process.env.DIRECT_URL ? "✅ Present" : "❌ Missing");
 console.log("JWT_SECRET:", process.env.JWT_SECRET ? "✅ Present" : "❌ Missing");
@@ -43,6 +44,7 @@ app.use(cors({
     'https://ai-form-builder2.vercel.app', // Vercel frontend
     'https://ai-form-builder2.vercel.app', // Vercel frontend (duplicate for safety)
     'https://ai-form-builder2-1.onrender.com', // Render frontend
+    'https://jadu-form-builder.onrender.com', // New Render frontend
     'https://your-frontend-domain.com' // Add your production frontend URL here
   ],
   credentials: true,
