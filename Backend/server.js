@@ -9,6 +9,17 @@ import nodemailer from "nodemailer";
 import qrcode from "qrcode";
 import { createClient } from "@supabase/supabase-js";
 
+// Check if required environment variables are present
+console.log("🔍 Environment variables check:");
+console.log("DATABASE_URL:", process.env.DATABASE_URL ? "✅ Present" : "❌ Missing");
+console.log("DIRECT_URL:", process.env.DIRECT_URL ? "✅ Present" : "❌ Missing");
+console.log("JWT_SECRET:", process.env.JWT_SECRET ? "✅ Present" : "❌ Missing");
+console.log("OPENROUTER_API_KEY:", process.env.OPENROUTER_API_KEY ? "✅ Present" : "❌ Missing");
+
+if (!process.env.DATABASE_URL) {
+  console.error("❌ DATABASE_URL environment variable is required");
+  process.exit(1);
+}
 
 // --- Initialize Express App ---
 const app = express();
