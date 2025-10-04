@@ -21,6 +21,7 @@ console.log("API Key being used:", process.env.OPENROUTER_API_KEY);
 app.use(cors({
   origin: [
     'http://localhost:5173',
+    'http://localhost:5174', // Added port 5174
     'http://localhost:3000',
     'https://ai-form-builder-s4hj.onrender.com',
     'https://your-frontend-domain.com' // Add your production frontend URL here
