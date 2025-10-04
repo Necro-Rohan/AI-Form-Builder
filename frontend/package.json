@@ -16,12 +16,7 @@
     "react-hot-toast": "^2.4.0",
     "@rjsf/core": "^5.0.0",
     "@rjsf/utils": "^5.0.0",
-    "@rjsf/validator-ajv8": "^5.0.0",
-    "@rjsf/material-ui": "^5.0.0",
-    "@mui/material": "^5.11.0",
-    "@emotion/react": "^11.10.5",
-    "@emotion/styled": "^11.10.5",
-    "@mui/icons-material": "^5.11.0"
+    "@rjsf/validator-ajv8": "^5.0.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.27",
