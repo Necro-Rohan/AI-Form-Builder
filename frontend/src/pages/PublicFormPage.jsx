@@ -4,6 +4,7 @@ import Form from '@rjsf/core';
 import validator from '@rjsf/validator-ajv8';
 import { CheckCircle, AlertCircle } from 'lucide-react';
 import StyledForm from '../components/StyledForm';
+import FormErrorBoundary from '../components/FormErrorBoundary';
 import { FORM_TEMPLATES } from '../config/templates';
 import toast from 'react-hot-toast';
 
@@ -40,26 +41,41 @@ const PublicFormPage = () => {
     setSubmitting(true);
     
     try {
+      console.log('Raw form data received:', data);
+      console.log('Form ID:', id);
+      
+      // Extract form data properly
+      const formData = data.formData || data;
+      console.log('Extracted form data:', formData);
+      
+      const payload = {
+        formId: id,
+        formData: formData
+      };
+      
+      console.log('Payload being sent:', payload);
+      
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/save-response`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          formId: id,
-          formData: data.formData
-        })
+        body: JSON.stringify(payload)
       });
+
+      const responseData = await response.json();
+      console.log('Response received:', responseData);
 
       if (response.ok) {
         setSubmitted(true);
         toast.success('Thank you! Your response has been submitted.');
       } else {
-        toast.error('Failed to submit response');
+        console.error('Submission error:', responseData);
+        toast.error(responseData.error || 'Failed to submit response');
       }
     } catch (error) {
       console.error('Error submitting response:', error);
-      toast.error('Network error');
+      toast.error('Network error. Please check your connection.');
     } finally {
       setSubmitting(false);
     }
@@ -103,12 +119,14 @@ const PublicFormPage = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-        <StyledForm
-          form={form}
-          template={FORM_TEMPLATES.MODERN} // Use modern template as default for public forms
-          onSubmit={handleSubmit}
-          disabled={submitting}
-        />
+        <FormErrorBoundary>
+          <StyledForm
+            form={form}
+            template={FORM_TEMPLATES.MODERN} // Use modern template as default for public forms
+            onSubmit={handleSubmit}
+            disabled={submitting}
+          />
+        </FormErrorBoundary>
       </div>
     </div>
   );

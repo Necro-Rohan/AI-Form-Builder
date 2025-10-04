@@ -9,6 +9,7 @@ import DashboardPage from "./pages/DashboardPage";
 import FormBuilderPage from "./pages/FormBuilderPage";
 import ResponsesPage from "./pages/ResponsesPage";
 import PublicFormPage from "./pages/PublicFormPage";
+import TestFormPage from "./pages/TestFormPage";
 import Navigation from "./components/Navigation";
 
 function ProtectedRoute({ children }) {
@@ -68,6 +69,7 @@ function App() {
               } />
 
               <Route path="/f/:id" element={<PublicFormPage />} />
+              <Route path="/test-form" element={<TestFormPage />} />
             </Routes>
           </main>
           <Toaster position="top-right" />

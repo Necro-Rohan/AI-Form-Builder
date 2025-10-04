@@ -17,7 +17,19 @@ const PORT = process.env.PORT || 3000;
 
 console.log("API Key being used:", process.env.OPENROUTER_API_KEY);
 
-app.use(cors());
+// CORS configuration
+app.use(cors({
+  origin: [
+    'http://localhost:5173',
+    'http://localhost:3000',
+    'https://ai-form-builder-s4hj.onrender.com',
+    'https://your-frontend-domain.com' // Add your production frontend URL here
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 app.use(express.json());
 
 // Initialize OpenAI (OpenRouter)
@@ -32,6 +44,25 @@ const openrouter = new OpenAI({
 
 // Initialize Prisma Client
 const prisma = new PrismaClient();
+
+// Test database connection
+async function testDatabaseConnection() {
+  try {
+    await prisma.$connect();
+    console.log('✅ Database connected successfully');
+  } catch (error) {
+    console.error('❌ Database connection failed:', error.message);
+    console.log('\n🔧 To fix this issue:');
+    console.log('1. Install PostgreSQL locally: brew install postgresql');
+    console.log('2. Start PostgreSQL: brew services start postgresql');
+    console.log('3. Create database: createdb form_builder');
+    console.log('4. Or use a free cloud database: https://neon.tech');
+    process.exit(1);
+  }
+}
+
+// Test connection on startup
+testDatabaseConnection();
 
 // Initialize Supabase
 const supabase = createClient(
@@ -385,7 +416,16 @@ Generate the schema now:`;
         
         // Try to parse the AI response as JSON
         try {
-          const aiGenerated = JSON.parse(aiContent);
+          // Clean the AI response by removing markdown formatting
+          let cleanedContent = aiContent;
+          if (cleanedContent.includes('```json')) {
+            cleanedContent = cleanedContent.replace(/```json\s*/g, '').replace(/```\s*$/g, '');
+          }
+          if (cleanedContent.includes('```')) {
+            cleanedContent = cleanedContent.replace(/```\s*/g, '');
+          }
+          
+          const aiGenerated = JSON.parse(cleanedContent.trim());
           if (aiGenerated.schema && aiGenerated.uiSchema) {
             generatedJson = aiGenerated;
             console.log('AI-generated schema:', generatedJson);
@@ -884,6 +924,19 @@ app.post("/api/save-response", async (req, res) => {
       return res.status(400).json({ error: "formId and formData are required" });
     }
 
+    // Check if the form exists and is public
+    const form = await prisma.form.findUnique({
+      where: { 
+        id: formId,
+        isPublic: true,
+        status: 'PUBLISHED'
+      }
+    });
+
+    if (!form) {
+      return res.status(404).json({ error: "Form not found or not public" });
+    }
+
     const savedResponse = await prisma.response.create({
       data: {
         formId: formId,
@@ -894,7 +947,7 @@ app.post("/api/save-response", async (req, res) => {
     return res.status(200).json({ message: "Response saved successfully!", responseId: savedResponse.id });
   } catch (error) {
     console.error("Error saving response:", error);
-    return res.status(500).json({ error: "Failed to save response." });
+    return res.status(500).json({ error: "Failed to save response.", details: error.message });
   }
 });
 
