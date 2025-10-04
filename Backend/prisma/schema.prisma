@@ -1,19 +1,13 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
-
 
 datasource db {
   provider  = "postgresql"
   url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
+
 model User {
   id        String   @id @default(uuid())
   email     String   @unique
@@ -25,30 +19,23 @@ model User {
 }
 
 model Form {
-  id          String      @id @default(uuid())
+  id          String     @id @default(uuid())
   title       String
   description String?
   schema      Json
   uiSchema    Json
-  status      FormStatus  @default(DRAFT)
-  isPublic    Boolean     @default(false)
+  status      FormStatus @default(DRAFT)
+  isPublic    Boolean    @default(false)
   password    String?
-  collectIp   Boolean     @default(false)
+  collectIp   Boolean    @default(false)
   notifyEmail String?
   privacy     Json?
   publishedAt DateTime?
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt @default(now())
-  
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @default(now()) @updatedAt
   userId      String?
-  user        User?       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user        User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
   responses   Response[]
-}
-
-enum FormStatus {
-  DRAFT
-  PUBLISHED
-  ARCHIVED
 }
 
 model Response {
@@ -56,6 +43,11 @@ model Response {
   formId    String
   data      Json
   createdAt DateTime @default(now())
+  form      Form     @relation(fields: [formId], references: [id], onDelete: Cascade)
+}
 
-  form      Form @relation(fields: [formId], references: [id], onDelete: Cascade)
+enum FormStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
 }

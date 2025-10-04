@@ -34,107 +34,159 @@ const StyledForm = ({ form, template, onSubmit, onFormChange }) => {
 
   // Custom widgets for different field types
   const widgets = {
-    TextWidget: (props) => (
-      <input
-        {...props}
-        className={selectedTemplate.styles.input}
-        style={{ 
-          backgroundColor: selectedTemplate.colors.surface,
-          borderColor: selectedTemplate.colors.border,
-          color: selectedTemplate.colors.text
-        }}
-      />
-    ),
-    TextareaWidget: (props) => (
-      <textarea
-        {...props}
-        className={selectedTemplate.styles.textarea}
-        style={{ 
-          backgroundColor: selectedTemplate.colors.surface,
-          borderColor: selectedTemplate.colors.border,
-          color: selectedTemplate.colors.text
-        }}
-      />
-    ),
-    SelectWidget: (props) => (
-      <select
-        {...props}
-        className={selectedTemplate.styles.select}
-        style={{ 
-          backgroundColor: selectedTemplate.colors.surface,
-          borderColor: selectedTemplate.colors.border,
-          color: selectedTemplate.colors.text
-        }}
-      >
-        {props.options.enumOptions.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-    ),
-    CheckboxWidget: (props) => (
-      <div className="flex items-center space-x-2">
+    TextWidget: (props) => {
+      const { value, onChange, onBlur, onFocus, disabled, readonly, placeholder, ...domProps } = props;
+      return (
         <input
-          {...props}
-          type="checkbox"
-          className={selectedTemplate.styles.checkbox}
+          {...domProps}
+          type="text"
+          value={value || ''}
+          onChange={(e) => onChange(e.target.value)}
+          onBlur={onBlur}
+          onFocus={onFocus}
+          disabled={disabled}
+          readOnly={readonly}
+          placeholder={placeholder}
+          className={selectedTemplate.styles.input}
           style={{ 
-            accentColor: selectedTemplate.colors.primary
+            backgroundColor: selectedTemplate.colors.surface,
+            borderColor: selectedTemplate.colors.border,
+            color: selectedTemplate.colors.text
           }}
         />
-        <label className="text-sm font-medium" style={{ color: selectedTemplate.colors.text }}>
-          {props.label}
-        </label>
-      </div>
-    ),
-    RadioWidget: (props) => (
-      <div className="space-y-2">
-        {props.options.enumOptions.map((option) => (
-          <div key={option.value} className="flex items-center space-x-2">
-            <input
-              {...props}
-              type="radio"
-              value={option.value}
-              checked={props.value === option.value}
-              className={selectedTemplate.styles.radio}
-              style={{ 
-                accentColor: selectedTemplate.colors.primary
-              }}
-            />
-            <label className="text-sm font-medium" style={{ color: selectedTemplate.colors.text }}>
+      );
+    },
+    TextareaWidget: (props) => {
+      const { value, onChange, onBlur, onFocus, disabled, readonly, placeholder, ...domProps } = props;
+      return (
+        <textarea
+          {...domProps}
+          value={value || ''}
+          onChange={(e) => onChange(e.target.value)}
+          onBlur={onBlur}
+          onFocus={onFocus}
+          disabled={disabled}
+          readOnly={readonly}
+          placeholder={placeholder}
+          className={selectedTemplate.styles.textarea}
+          style={{ 
+            backgroundColor: selectedTemplate.colors.surface,
+            borderColor: selectedTemplate.colors.border,
+            color: selectedTemplate.colors.text
+          }}
+        />
+      );
+    },
+    SelectWidget: (props) => {
+      const { value, onChange, onBlur, onFocus, disabled, readonly, options, ...domProps } = props;
+      const enumOptions = options?.enumOptions || [];
+      return (
+        <select
+          {...domProps}
+          value={value || ''}
+          onChange={(e) => onChange(e.target.value)}
+          onBlur={onBlur}
+          onFocus={onFocus}
+          disabled={disabled}
+          readOnly={readonly}
+          className={selectedTemplate.styles.select}
+          style={{ 
+            backgroundColor: selectedTemplate.colors.surface,
+            borderColor: selectedTemplate.colors.border,
+            color: selectedTemplate.colors.text
+          }}
+        >
+          {enumOptions.map((option) => (
+            <option key={option.value} value={option.value}>
               {option.label}
-            </label>
-          </div>
-        ))}
-      </div>
-    ),
-    CheckboxesWidget: (props) => (
-      <div className="space-y-2">
-        {props.options.enumOptions.map((option) => (
-          <div key={option.value} className="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              value={option.value}
-              checked={props.value?.includes(option.value) || false}
-              onChange={(e) => {
-                const newValue = e.target.checked
-                  ? [...(props.value || []), option.value]
-                  : (props.value || []).filter(v => v !== option.value);
-                props.onChange(newValue);
-              }}
-              className={selectedTemplate.styles.checkbox}
-              style={{ 
-                accentColor: selectedTemplate.colors.primary
-              }}
-            />
-            <label className="text-sm font-medium" style={{ color: selectedTemplate.colors.text }}>
-              {option.label}
-            </label>
-          </div>
-        ))}
-      </div>
-    )
+            </option>
+          ))}
+        </select>
+      );
+    },
+    CheckboxWidget: (props) => {
+      const { value, onChange, onBlur, onFocus, disabled, readonly, label, ...domProps } = props;
+      return (
+        <div className="flex items-center space-x-2">
+          <input
+            {...domProps}
+            type="checkbox"
+            checked={value || false}
+            onChange={(e) => onChange(e.target.checked)}
+            onBlur={onBlur}
+            onFocus={onFocus}
+            disabled={disabled}
+            readOnly={readonly}
+            className={selectedTemplate.styles.checkbox}
+            style={{ 
+              accentColor: selectedTemplate.colors.primary
+            }}
+          />
+          <label className="text-sm font-medium" style={{ color: selectedTemplate.colors.text }}>
+            {label}
+          </label>
+        </div>
+      );
+    },
+    RadioWidget: (props) => {
+      const { value, onChange, onBlur, onFocus, disabled, readonly, options, ...domProps } = props;
+      const enumOptions = options?.enumOptions || [];
+      return (
+        <div className="space-y-2">
+          {enumOptions.map((option) => (
+            <div key={option.value} className="flex items-center space-x-2">
+              <input
+                {...domProps}
+                type="radio"
+                value={option.value}
+                checked={value === option.value}
+                onChange={(e) => onChange(e.target.value)}
+                onBlur={onBlur}
+                onFocus={onFocus}
+                disabled={disabled}
+                readOnly={readonly}
+                className={selectedTemplate.styles.radio}
+                style={{ 
+                  accentColor: selectedTemplate.colors.primary
+                }}
+              />
+              <label className="text-sm font-medium" style={{ color: selectedTemplate.colors.text }}>
+                {option.label}
+              </label>
+            </div>
+          ))}
+        </div>
+      );
+    },
+    CheckboxesWidget: (props) => {
+      const options = props.options?.enumOptions || [];
+      return (
+        <div className="space-y-2">
+          {options.map((option) => (
+            <div key={option.value} className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                value={option.value}
+                checked={props.value?.includes(option.value) || false}
+                onChange={(e) => {
+                  const newValue = e.target.checked
+                    ? [...(props.value || []), option.value]
+                    : (props.value || []).filter(v => v !== option.value);
+                  props.onChange(newValue);
+                }}
+                className={selectedTemplate.styles.checkbox}
+                style={{ 
+                  accentColor: selectedTemplate.colors.primary
+                }}
+              />
+              <label className="text-sm font-medium" style={{ color: selectedTemplate.colors.text }}>
+                {option.label}
+              </label>
+            </div>
+          ))}
+        </div>
+      );
+    }
   };
 
   // Custom field template
