@@ -34,6 +34,11 @@ app.use(cors({
     'http://localhost:5173',
     'http://localhost:5174', // Added port 5174
     'http://localhost:3000',
+    'http://localhost:3001',
+    'http://localhost:3002',
+    'http://localhost:3003',
+    'http://localhost:3004',
+    'http://localhost:3005',
     'https://ai-form-builder-s4hj.onrender.com',
     'https://ai-form-builder2.vercel.app', // Vercel frontend
     'https://ai-form-builder2.vercel.app', // Vercel frontend (duplicate for safety)
