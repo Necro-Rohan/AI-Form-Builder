@@ -9,8 +9,8 @@ export default defineConfig({
   },
   preview: {
     port: 10000,
-    host: true,
-    allowedHosts: 'all'
+    host: '0.0.0.0',
+    strictPort: false
   },
   build: {
     outDir: 'dist',

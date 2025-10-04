@@ -7,7 +7,7 @@
     "dev": "npx vite",
     "build": "npx vite build",
     "preview": "npx vite preview --port 10000 --host 0.0.0.0",
-    "start": "npm run preview"
+    "start": "npx serve dist -p 10000 -s"
   },
   "dependencies": {
     "react": "^18.2.0",
@@ -25,7 +25,8 @@
     "lucide-react": "^0.263.1",
     "@dnd-kit/core": "^6.0.8",
     "@dnd-kit/sortable": "^7.0.2",
-    "@dnd-kit/utilities": "^3.2.1"
+    "@dnd-kit/utilities": "^3.2.1",
+    "serve": "^14.2.1"
   },
   "devDependencies": {
     "@types/react": "^18.0.27",
