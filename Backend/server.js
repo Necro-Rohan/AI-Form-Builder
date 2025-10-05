@@ -9,6 +9,18 @@ import nodemailer from "nodemailer";
 import qrcode from "qrcode";
 import { createClient } from "@supabase/supabase-js";
 
+// Check if required environment variables are present
+console.log("🔍 Environment variables check:");
+console.log("🚀 CORS updated for jadu-form-builder.onrender.com");
+console.log("DATABASE_URL:", process.env.DATABASE_URL ? "✅ Present" : "❌ Missing");
+console.log("DIRECT_URL:", process.env.DIRECT_URL ? "✅ Present" : "❌ Missing");
+console.log("JWT_SECRET:", process.env.JWT_SECRET ? "✅ Present" : "❌ Missing");
+console.log("OPENROUTER_API_KEY:", process.env.OPENROUTER_API_KEY ? "✅ Present" : "❌ Missing");
+
+if (!process.env.DATABASE_URL) {
+  console.error("❌ DATABASE_URL environment variable is required");
+  process.exit(1);
+}
 
 // --- Initialize Express App ---
 const app = express();
@@ -23,7 +35,16 @@ app.use(cors({
     'http://localhost:5173',
     'http://localhost:5174', // Added port 5174
     'http://localhost:3000',
+    'http://localhost:3001',
+    'http://localhost:3002',
+    'http://localhost:3003',
+    'http://localhost:3004',
+    'http://localhost:3005',
     'https://ai-form-builder-s4hj.onrender.com',
+    'https://ai-form-builder2.vercel.app', // Vercel frontend
+    'https://ai-form-builder2.vercel.app', // Vercel frontend (duplicate for safety)
+    'https://ai-form-builder2-1.onrender.com', // Render frontend
+    'https://jadu-form-builder.onrender.com', // New Render frontend
     'https://your-frontend-domain.com' // Add your production frontend URL here
   ],
   credentials: true,

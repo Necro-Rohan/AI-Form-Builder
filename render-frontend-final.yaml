@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: ai-form-builder-frontend
+    env: node
+    plan: free
+    buildCommand: npm install --legacy-peer-deps && npm run build
+    startCommand: npm run preview --port 10000 --host 0.0.0.0
+    envVars:
+      - key: VITE_API_URL
+        value: https://ai-form-builder-s4hj.onrender.com
+      - key: VITE_NODE_ENV
+        value: production
+      - key: NODE_ENV
+        value: production
